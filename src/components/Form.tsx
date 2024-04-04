@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { categories } from "../data/categories";
 
 export default function Form() {
@@ -8,14 +8,27 @@ export default function Form() {
     calories: 0,
   });
 
-  const handleChange = () => {
-    console.log("alog");
+  const handleChangeCategory = (event: ChangeEvent<HTMLSelectElement>) => {
+    setActivity({
+      ...activity,
+      [event.target.id]: event.target.value,
+    });
+  };
+
+  const handleChange = (
+    event: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>
+  ) => {
+    setActivity({
+      ...activity,
+      [event.target.id]: event.target.value,
+    });
   };
 
   return (
     <>
       <form className="space-y-5 bg-white shadow p-10 rounded-lg">
         <div className="grid grid-cols-1 gap-3">
+          {activity.name}
           <label htmlFor="category" className="font-bold">
             Categoria:
           </label>
