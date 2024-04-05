@@ -1,13 +1,23 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, Dispatch, FormEvent, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+
 import { categories } from "../data/categories";
 import { Activity } from "../types/Activity";
+import { ActivityActions } from "../reducers/activityReducer";
 
-export default function Form() {
-  const [activity, setActivity] = useState<Activity>({
+type FormProps = {
+  dispatch: Dispatch<ActivityActions>;
+};
+
+export default function Form({ dispatch }: FormProps) {
+  const initialState: Activity = {
+    id: uuidv4(),
     category: 1,
     name: "",
     calories: 0,
-  });
+  };
+
+  const [activity, setActivity] = useState<Activity>(initialState);
 
   const handleChange = (
     event: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>
@@ -30,7 +40,15 @@ export default function Form() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(event);
+
+    dispatch({
+      type: "save-activity",
+      payload: {
+        newActivity: activity,
+      },
+    });
+
+    setActivity({ ...initialState, id: uuidv4() });
   };
 
   return (
@@ -40,7 +58,6 @@ export default function Form() {
         onSubmit={handleSubmit}
       >
         <div className="grid grid-cols-1 gap-3">
-          {activity.name}
           <label htmlFor="category" className="font-bold">
             Categoria:
           </label>
@@ -88,7 +105,7 @@ export default function Form() {
 
         <input
           type="submit"
-          className="bg-gray-800 hover:bg-gray-900 w-full p-2 font-bold text-white rounded-md uppercase"
+          className="bg-gray-800 hover:bg-gray-900 w-full p-2 font-bold text-white rounded-md uppercase disabled:opacity-10"
           value={
             activity.category === 1 ? "Guardar comida" : "Guardar ejercicio"
           }
