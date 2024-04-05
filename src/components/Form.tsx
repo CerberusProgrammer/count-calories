@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { categories } from "../data/categories";
 import { Activity } from "../types/Activity";
 
@@ -8,13 +8,6 @@ export default function Form() {
     name: "",
     calories: 0,
   });
-
-  const handleChangeCategory = (event: ChangeEvent<HTMLSelectElement>) => {
-    setActivity({
-      ...activity,
-      [event.target.id]: event.target.value,
-    });
-  };
 
   const handleChange = (
     event: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>
@@ -35,7 +28,10 @@ export default function Form() {
     return name.trim() !== "" && calories > 0;
   };
 
-  const handleSubmit = (event) => {};
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log(event);
+  };
 
   return (
     <>
